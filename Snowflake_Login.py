@@ -6,7 +6,7 @@ st.set_page_config(
     layout = "wide",
 )
 
-st.title('App Setup')
+st.title('Login to Snowflake Account')
 
 def connector_parameters():
     account = st.text_input('Enter Account',placeholder='evb84982',help='Enter Locator variable in account section')
