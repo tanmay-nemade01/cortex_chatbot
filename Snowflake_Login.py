@@ -26,6 +26,6 @@ if st.button('Login'):
     session = Session.builder.configs(conn).create()
     st.session_state['session'] = session
     st.success('Connection Successful')
-    st.switch_page("pages/setup_database.py")
+    st.switch_page("pages/1_Setup_Database.py")
 
 st.info('Default role selected is Accountadmin and default warehouse is COMPUTE_WH. Make sure you have access to both.')

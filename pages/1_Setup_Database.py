@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 from pathlib import Path
 
+
+
 session = st.session_state['session']
 
 databases = pd.DataFrame(session.sql('show databases;').collect())
@@ -71,6 +73,9 @@ if database != '' and schema != '':
         )
         status.update(
         label="Setup Complete. Proceed to the chatbot", state="complete", expanded=False
-    )
+        )
+        st.switch_page("pages/2_Chatbot.py")
 
 
+if st.checkbox('Already done with setup. Skip this step'):
+    st.switch_page("pages/2_Chatbot.py")
