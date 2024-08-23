@@ -11,5 +11,3 @@ schemas = pd.DataFrame(session.sql(f'show schemas in {database};').collect())
 schema_list = tuple(schemas['name'])
 schema = st.selectbox('Select a schema to setup',schema_list)
 
-
-
