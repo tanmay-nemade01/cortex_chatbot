@@ -1,2 +1,2 @@
 snowflake-connector-python
-snowflake-snowpark-pyhton
+snowflake-snowpark-python
