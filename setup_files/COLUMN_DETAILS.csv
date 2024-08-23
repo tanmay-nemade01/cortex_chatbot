@@ -16,7 +16,3 @@ DATA_TABLE,PUR_GRP_NAME,STRING,Purchase Group name responsible for purchasing,US
 DATA_TABLE,LOCAL_CURRENCY,STRING,Currency in which purchase performed,USD
 DATA_TABLE,INVOICE_COUNT,NUMBER,Number of line items in given purchase order,4
 DATA_TABLE,TOTAL_SPEND,NUMBER,Total Purchase Order Value of a given purchase order,320
-,,,,
-,,,,
-,,,,
-,,,,
