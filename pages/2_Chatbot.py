@@ -63,28 +63,34 @@ if database != '' and schema != '':
     for i in range(len(column_detail_prompt)):
         instructions = instructions + column_detail_prompt[i]
     # Details of table and fields can be found out in table sap_data.sap_data.llm_catalog"
+    with st.chat_message('user'):
+        st.markdown("Are you ready to answer few of my questions?")
+    with st.chat_message('assistant'):
+        st.markdown("Sure. How can I help?")
     
     if "messages" not in st.session_state.keys():
         st.session_state.messages = []
         st.session_state.messages.append({'role': 'system', 'content': instructions})
-        st.session_state.messages.append({'role': 'user', 'content': "Are you ready to answer few of my questions?"})
-        st.session_state.messages.append({'role': 'assistant', 'content': "Sure. How can I help?"})
+
+    if "history" not in st.session_state.keys():
+        st.session_state.history = []
 
     
     # st.chat_message("user").write(prompt)
     temperature_set = {'temperature': 0.7,'max_tokens': 1000}
-    for message in st.session_state.messages:
-        if message['role'] == 'system':
-            pass
-        else:
+    for message in st.session_state.history:
+        if message["role"] == 'user' or message["role"] == 'assistant':
             with st.chat_message(message["role"]):
-              st.markdown(message["content"])
+                st.markdown(message["content"])
+        else:
+            st.table(message["content"])
     prompt = st.chat_input('Write Your Question Here')
     if prompt:
-        st.session_state.messages.append({'role': 'user', 'content': prompt})
         with st.chat_message("user"):
             st.markdown(prompt)
         with st.spinner(f"{selected_model} thinking..."):
+            st.session_state.messages.append({'role': 'user', 'content': prompt})
+            st.session_state.history.append({'role': 'user', 'content': prompt})
             df = session.sql(f"SELECT SNOWFLAKE.CORTEX.COMPLETE('{selected_model}',{st.session_state.messages},{temperature_set}) as response;").collect()
             ai_response = str(df[0][0])
             # Parse the JSON string
@@ -107,12 +113,14 @@ if database != '' and schema != '':
                 query = query.replace('vbnet','')
             ai_response = ai_response.replace("'",'')
             st.session_state.messages.append({'role': 'assistant', 'content': ai_response})
+            st.session_state.history.append({'role': 'assistant', 'content': query})
 
             if query != '' and "```" in ai_response:
                 try:
                     output = session.sql(query).collect()
                     st.markdown('Result:')
                     st.table(output)
+                    st.session_state.history.append({'role': 'table', 'content': output})
                 except:
                     st.error('Something went wrong')
                 with st.expander("See Explaination"):
